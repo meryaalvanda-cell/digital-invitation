@@ -2,23 +2,28 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Copy, Check, Gift } from "lucide-react";
+import { Copy, Check, Gift, QrCode, Download } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
-import { invitationData } from "@/data/invitation";
 import { copyToClipboard } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
-function AccountCard() {
-  const { gift } = invitationData;
-  const [copied, setCopied] = useState<"number" | null>(null);
+// --- KOMPONEN ACCOUNT CARD (TRANSFER BANK) ---
+interface BankAccount {
+  bankName: string;
+  accountHolder: string;
+  accountNumber: string;
+}
 
-  async function handleCopy(text: string, type: "number") {
+function AccountCard({ gift }: { gift: BankAccount }) {
+  const [isCopied, setIsCopied] = useState(false);
+
+  async function handleCopy(text: string) {
     try {
       await copyToClipboard(text);
-      setCopied(type);
-      setTimeout(() => setCopied(null), 2200);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2200);
     } catch {
-      // Clipboard API tidak tersedia di beberapa browser lama
+      // Fallback
     }
   }
 
@@ -59,40 +64,24 @@ function AccountCard() {
               {gift.accountNumber}
             </p>
             <motion.button
-              onClick={() => handleCopy(gift.accountNumber, "number")}
+              onClick={() => handleCopy(gift.accountNumber)}
               className={cn(
                 "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-all duration-300",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]",
-                copied === "number"
+                isCopied
                   ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
                   : "border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/60"
               )}
               whileTap={{ scale: 0.9 }}
-              aria-label={
-                copied === "number"
-                  ? "Nomor rekening tersalin"
-                  : "Salin nomor rekening"
-              }
+              aria-label={isCopied ? "Tersalin" : "Salin"}
             >
               <AnimatePresence mode="wait" initial={false}>
-                {copied === "number" ? (
-                  <motion.span
-                    key="check"
-                    initial={{ scale: 0, rotate: -45 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    exit={{ scale: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
+                {isCopied ? (
+                  <motion.span key="check" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
                     <Check className="h-4 w-4" />
                   </motion.span>
                 ) : (
-                  <motion.span
-                    key="copy"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
+                  <motion.span key="copy" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
                     <Copy className="h-4 w-4" />
                   </motion.span>
                 )}
@@ -100,16 +89,9 @@ function AccountCard() {
             </motion.button>
           </div>
           <AnimatePresence>
-            {copied === "number" && (
-              <motion.p
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="text-xs text-emerald-400"
-                role="status"
-                aria-live="polite"
-              >
-                Nomor rekening tersalin ke clipboard
+            {isCopied && (
+              <motion.p initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="text-xs text-emerald-400">
+                Nomor rekening tersalin
               </motion.p>
             )}
           </AnimatePresence>
@@ -119,7 +101,78 @@ function AccountCard() {
   );
 }
 
+// --- KOMPONEN QRIS CARD ---
+interface QrisData {
+  imageSrc: string;
+  accountHolder: string;
+}
+
+function QrisCard({ qris }: { qris: QrisData }) {
+  // Membuat nama file download yang dinamis sesuai nama pemilik
+  const downloadFileName = `QRIS-${qris.accountHolder.replace(/\s+/g, "-")}.png`;
+
+  return (
+    <div className="card-glass flex flex-col items-center rounded-3xl border border-[#D4AF37]/15 p-8 shadow-[0_4px_32px_rgba(212,175,55,0.08)]">
+      <div className="mb-4 flex items-center gap-2">
+        <QrCode className="h-5 w-5 text-[#D4AF37]" />
+        <h3 className="font-serif text-lg font-semibold text-[color:var(--text-primary)]">
+          Scan QRIS
+        </h3>
+      </div>
+
+      <div className="mb-4 overflow-hidden rounded-2xl bg-white p-4 shadow-inner">
+        <img
+          src={qris.imageSrc}
+          alt={`QRIS Barcode ${qris.accountHolder}`}
+          className="h-48 w-48 object-contain sm:h-56 sm:w-56"
+          loading="lazy"
+        />
+      </div>
+
+      <p className="mb-6 font-sans text-sm font-medium text-[color:var(--text-primary)]">
+        a.n. {qris.accountHolder}
+      </p>
+
+      <a
+        href={qris.imageSrc}
+        download={downloadFileName}
+        className="group flex items-center gap-2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-6 py-2.5 font-sans text-sm font-medium text-[#D4AF37] transition-all hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/20"
+      >
+        <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
+        Simpan QRIS
+      </a>
+    </div>
+  );
+}
+
+// --- KOMPONEN UTAMA GIFT SECTION ---
 export function GiftSection() {
+  // Data 2 QRIS
+  const qrisDataList: QrisData[] = [
+    {
+      imageSrc: "/images/qris1.jpeg", // Path QRIS pertama (misal: pengantin pria)
+      accountHolder: "Habib Shibghatallah",
+    },
+    {
+      imageSrc: "/images/qris1.jpeg", // Path QRIS kedua (misal: pengantin wanita)
+      accountHolder: "Linda Nur'ain",
+    }
+  ];
+
+  // Data 2 Rekening Bank
+  const giftsData: BankAccount[] = [
+    {
+      bankName: "BNI",
+      accountHolder: "Habib Shibghatallah",
+      accountNumber: "2049463152",
+    },
+    {
+     bankName: "BSI",
+      accountHolder: "Linda Nur'ain",
+      accountNumber: "asdfasd",
+    }
+  ];
+
   return (
     <section
       id="gift"
@@ -139,17 +192,38 @@ export function GiftSection() {
             <p className="font-sans text-sm text-[color:var(--text-secondary)] max-w-sm text-balance leading-relaxed">
               Kehadiran dan doa Anda adalah hadiah terindah bagi kami. Namun
               jika Anda ingin memberikan tanda kasih, kami menerima dengan penuh
-              rasa syukur.
+              rasa syukur melalui pilihan di bawah ini.
             </p>
           </div>
         </Reveal>
 
-        <Reveal delay={0.15} direction="up">
-          <AccountCard />
-        </Reveal>
+        <div className="flex flex-col gap-6">
+          {/* 1. Render 2 QRIS Cards */}
+          {qrisDataList.map((qris, index) => (
+            <Reveal key={`qris-${index}`} delay={0.15 + index * 0.1} direction="up">
+              <QrisCard qris={qris} />
+            </Reveal>
+          ))}
 
-        <Reveal delay={0.25} direction="up">
-          <p className="mt-6 text-center font-sans text-xs text-[color:var(--text-muted)] leading-relaxed">
+          {/* 2. Pemisah Visual ("Atau Transfer Bank") */}
+          <Reveal delay={0.35} direction="up">
+            <div className="flex items-center gap-4 py-2">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent"></div>
+              <span className="font-sans text-xs text-[#D4AF37]/60 uppercase tracking-widest text-center">Atau Transfer</span>
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent"></div>
+            </div>
+          </Reveal>
+
+          {/* 3. Render 2 Account Cards */}
+          {giftsData.map((gift, index) => (
+            <Reveal key={`bank-${index}`} delay={0.45 + index * 0.1} direction="up">
+              <AccountCard gift={gift} />
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={0.65} direction="up">
+          <p className="mt-8 text-center font-sans text-xs text-[color:var(--text-muted)] leading-relaxed">
             Konfirmasi transfer dapat dikirimkan melalui WhatsApp kepada
             keluarga pengantin. Terima kasih atas kebaikan hati Anda.
           </p>

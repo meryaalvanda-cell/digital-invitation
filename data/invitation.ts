@@ -36,9 +36,9 @@ export const invitationData: InvitationData = {
     },
   },
   gift: {
-    bankName: "BCA",
-    accountHolder: "Arga Pradipta",
-    accountNumber: "2391034674",
+    bankName: "BNI",
+    accountHolder: "Habib Shibghatallah",
+    accountNumber: "2049463152",
   },
   story: [
     {
