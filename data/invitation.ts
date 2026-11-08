@@ -12,15 +12,15 @@ export const invitationData: InvitationData = {
   event: {
     akad: {
       name: "Akad Nikah",
-      date: "2026-12-20",
-      day: "Sabtu",
+      date: "2026-12-6",
+      day: "Minggu",
       time: "08.00 WIB",
-      venue: "Grand Ballroom Nusantara",
-      address: "Jl. Magelang No. 18, Sleman",
-      city: "Yogyakarta",
+      venue: "Masjid Agung Baiturrahim",
+      address: "Jl. Raja Eyato No.1 Limba B, Kota Sel",
+      city: "Gorontalo",
       mapsUrl:
         "https://maps.google.com/?q=Grand+Ballroom+Nusantara+Yogyakarta",
-      mapsLabel: "Grand Ballroom Nusantara, Yogyakarta",
+      mapsLabel: "Masjid Agung Baiturrahim, Gorontalo",
     },
     reception: {
       name: "Resepsi Pernikahan",
@@ -69,7 +69,7 @@ export const invitationData: InvitationData = {
       year: "2026",
       title: "Pernikahan",
       description:
-        "Sabtu, 20 Desember 2026. Hari yang paling dinantikan. Kami mengundang Anda menjadi saksi momen bahagia ini.",
+        "Minggu, 6 Desember 2026. Hari yang paling dinantikan. Kami mengundang Anda menjadi saksi momen bahagia ini.",
     },
   ],
   gallery: [

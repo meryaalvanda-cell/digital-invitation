@@ -92,10 +92,10 @@ export function OpeningScreen({ guestName, onOpen }: OpeningScreenProps) {
               className="flex flex-col items-center gap-1"
             >
               <p className="font-sans text-sm text-[color:var(--text-muted)]">
-                Sabtu, 20 Desember 2026
+                Minggu, 6 Desember 2026
               </p>
               <p className="font-sans text-sm text-[color:var(--text-muted)]">
-                Grand Ballroom Nusantara, Yogyakarta
+                Masjid Agung Baiturrahim, Gorontalo
               </p>
             </motion.div>
 

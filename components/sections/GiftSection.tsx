@@ -169,7 +169,7 @@ export function GiftSection() {
     {
      bankName: "BSI",
       accountHolder: "Linda Nur'ain",
-      accountNumber: "asdfasd",
+      accountNumber: "7254218906",
     }
   ];
 

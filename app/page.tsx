@@ -70,7 +70,8 @@ export default function WeddingPage() {
             >
               <GallerySection />
             </Suspense>
-            <StorySection />
+            {/* <StorySection /> */}
+            <GiftSection />
             <RsvpSection />
             <Suspense
               fallback={
@@ -81,8 +82,7 @@ export default function WeddingPage() {
               }
             >
               <GuestbookSection />
-            </Suspense>
-            <GiftSection />
+            </Suspense>      
             <FooterSection />
           </main>
         </>

@@ -61,7 +61,7 @@ export function CountdownSection() {
             </h2>
             <div className="gold-divider w-24" aria-hidden />
             <p className="font-sans text-sm text-[color:var(--text-secondary)]">
-              Sabtu, 20 Desember 2026
+              Minggu, 6 Desember 2026
             </p>
           </div>
         </Reveal>

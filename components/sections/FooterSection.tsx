@@ -17,7 +17,7 @@ export function FooterSection() {
   async function handleShare() {
     const shareData = {
       title: `Pernikahan ${couple.groomFull} & ${couple.brideFull}`,
-      text: `Anda diundang ke pernikahan ${couple.groomFull} & ${couple.brideFull} pada Sabtu, 20 Desember 2026 di Yogyakarta. ${hashtag}`,
+      text: `Anda diundang ke pernikahan ${couple.groomFull} & ${couple.brideFull} pada Minggu, 6 Desember 2026 di Gorontalo. ${hashtag}`,
       url: SITE_URL,
     };
 

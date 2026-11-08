@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     title: "Pernikahan Habib & Linda — 6 Desember 2026",
     description:
-      "Kami mengundang Anda untuk menyaksikan dan memberikan doa restu atas pernikahan kami. Sabtu, 20 Desember 2026, Grand Ballroom Nusantara, Yogyakarta.",
+      "Kami mengundang Anda untuk menyaksikan dan memberikan doa restu atas pernikahan kami. Minggu, 6 Desember 2026, Masjid Agung Baiturrahim, Gorontalo.",
     siteName: "Undangan Pernikahan Habib & Linda",
     locale: "id_ID",
     images: [
