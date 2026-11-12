@@ -1,8 +1,9 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Pause, Music2 } from "lucide-react";
+import { Pause, Music2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MusicPlayerProps {
@@ -16,23 +17,38 @@ export function MusicPlayer({
 }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
-  const [ready, setReady] = useState(false);
 
+  // AUTO PLAY SAAT KOMPONEN DIMUAT
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const onCanPlay = () => setReady(true);
+    audio.volume = 0.5;
+    audio.loop = true;
+
+    const autoPlay = async () => {
+      try {
+        await audio.play();
+        setPlaying(true);
+      } catch (error) {
+        // Autoplay mungkin diblokir oleh browser
+        setPlaying(false);
+        console.log("Autoplay diblokir browser:", error);
+      }
+    };
+
+    autoPlay();
+
     const onEnded = () => setPlaying(false);
 
-    audio.addEventListener("canplaythrough", onCanPlay);
     audio.addEventListener("ended", onEnded);
+
     return () => {
-      audio.removeEventListener("canplaythrough", onCanPlay);
       audio.removeEventListener("ended", onEnded);
     };
   }, []);
 
+  // TOMBOL PLAY / PAUSE
   async function togglePlay() {
     const audio = audioRef.current;
     if (!audio) return;
@@ -43,7 +59,6 @@ export function MusicPlayer({
     } else {
       try {
         audio.volume = 0.5;
-        audio.loop = true;
         await audio.play();
         setPlaying(true);
       } catch {
@@ -54,7 +69,13 @@ export function MusicPlayer({
 
   return (
     <>
-      <audio ref={audioRef} src={src} preload="metadata" aria-hidden />
+      <audio
+        ref={audioRef}
+        src={src}
+        preload="auto"
+        aria-hidden="true"
+      />
+
       <motion.button
         onClick={togglePlay}
         className={cn(
@@ -97,7 +118,7 @@ export function MusicPlayer({
         {playing && (
           <span
             className="absolute inset-0 rounded-full animate-ping border border-[#D4AF37]/20"
-            aria-hidden
+            aria-hidden="true"
           />
         )}
       </motion.button>

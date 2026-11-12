@@ -5,7 +5,7 @@ export const invitationData: InvitationData = {
     groom: "Habib",
     bride: "Linda",
     groomFull: "Habib Shibghatallah",
-    brideFull: "Linda Nur'ain",
+    brideFull: "Linda Nur'ain Yusuf",
     groomParents: "Putra dari Bapak Turiatmojo & Ibu Dyah Zahreni",
     brideParents: "Putri dari Bapak Bambang Lestari & Ibu Dewi Rahayu",
   },
@@ -14,12 +14,12 @@ export const invitationData: InvitationData = {
       name: "Akad Nikah",
       date: "2026-12-6",
       day: "Minggu",
-      time: "08.00 WIB",
+      time: "09.00 WITA",
       venue: "Masjid Agung Baiturrahim",
       address: "Jl. Raja Eyato No.1 Limba B, Kota Sel",
       city: "Gorontalo",
       mapsUrl:
-        "https://maps.google.com/?q=Grand+Ballroom+Nusantara+Yogyakarta",
+        "https://maps.app.goo.gl/NUBGMt1aKMjCYUwb8",
       mapsLabel: "Masjid Agung Baiturrahim, Gorontalo",
     },
     reception: {

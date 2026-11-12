@@ -105,9 +105,17 @@ export function EventDetailsSection() {
         </Reveal>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+  <div className="md:col-span-2 flex justify-center">
+    <div className="w-full md:w-1/2">
+      <EventCard detail={event.akad} delay={0.1} />
+    </div>
+  </div>
+</div>
+
+        {/*<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <EventCard detail={event.akad} delay={0.1} />
           <EventCard detail={event.reception} delay={0.25} />
-        </div>
+        </div>*/}
       </div>
     </section>
   );
